@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday!</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #fcecef;
+      --primary: #d84a75;
+      --card-bg: #ffffff;
+      --text: #4a2d36;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Georgia', serif; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: #f7d6e0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .phone-container {
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 840px;
+      background: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      border-radius: 28px;
+      padding: 24px;
+      text-align: center;
+    }
+    .screen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.6s ease;
+    }
+    .screen.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+
+    h2 { color: var(--primary); font-size: 1.8rem; margin-bottom: 12px; }
+    p { color: var(--text); font-size: 1.05rem; margin-bottom: 20px; font-style: italic; }
+
+    /* Buttons */
+    .btn-row { display: flex; gap: 15px; margin-top: 15px; }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(216, 74, 117, 0.3);
+      transition: transform 0.2s;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+
+    /* Screen 2: Balloons */
+    .balloons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin: 30px 0; }
+    .balloon-slot {
+      width: 100px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .balloon {
+      width: 80px;
+      height: 100px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset -6px -6px 12px rgba(0,0,0,0.1), 0 8px 15px rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+    }
+    .balloon:active { transform: scale(0.9); }
+    .b-blue { background: radial-gradient(circle at 30% 30%, #b8e2f2, #7ec8e3); }
+    .b-pink { background: radial-gradient(circle at 30% 30%, #ffd1dc, #f48fb1); }
+    .b-green { background: radial-gradient(circle at 30% 30%, #c8e6c9, #81c784); }
+    .b-purple { background: radial-gradient(circle at 30% 30%, #e1bee7, #ba68c8); }
+
+    /* Screen 3: Candle */
+    .cake-container { position: relative; margin: 40px 0; cursor: pointer; }
+    .flame {
+      width: 16px;
+      height: 28px;
+      background: #ffb703;
+      border-radius: 50% 50% 20% 20%;
+      margin: 0 auto 5px;
+      box-shadow: 0 0 20px #fb8500, 0 0 40px #ffb703;
+      animation: flicker 0.4s infinite alternate;
+    }
+    .flame.off { display: none; }
+    @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.1) rotate(2deg); } }
+    .candle { width: 12px; height: 50px; background: #e63946; margin: 0 auto; border-radius: 4px; }
+    .cake-base { font-size: 5rem; line-height: 1; }
+
+    /* Screen 4: Bouquet */
+    .bouquet-img { font-size: 5.5rem; margin: 20px 0; animation: float 3s ease-in-out infinite alternate; }
+    @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+    .notes-list { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 280px; }
+    .note-bubble {
+      background: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--primary);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Screen 5: Letter */
+    .letter-card {
+      background: #fffdf9;
+      border: 1px solid #f1dede;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: left;
+      min-height: 280px;
+      max-height: 380px;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      line-height: 1.6;
+      color: #333;
+      font-size: 1rem;
+    }
+
+    /* Screen 6: Final Gift */
+    .gift-box { font-size: 5.5rem; cursor: pointer; transition: transform 0.2s; margin: 25px 0; }
+    .gift-box:active { transform: scale(1.15) rotate(5deg); }
+    .final-card {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    .final-card img { width: 180px; height: 180px; object-fit: cover; border-radius: 12px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="phone-container">
+  
+  <!-- Screen 1: Start -->
+  <div id="screen-1" class="screen active">
+    <div style="font-size: 4rem; margin-bottom: 10px;">🧸❤️🐰</div>
+    <h2>Happy Birthday, Vansh!</h2>
+    <p>Are you excited for what's next?</p>
+    <div class="btn-row">
+      <button class="btn" onclick="goToScreen(2)">Yes</button>
+      <button class="btn btn-outline" id="no-btn" onmouseover="moveNoBtn()" onclick="moveNoBtn()">No</button>
+    </div>
+  </div>
+
+  <!-- Screen 2: Balloons -->
+  <div id="screen-2" class="screen">
+    <h2>Pop all 4 balloons</h2>
+    <p id="pop-counter">0 / 4 POPPED</p>
+    <div class="balloons-grid">
+      <div class="balloon-slot"><div class="balloon b-blue" onclick="popBalloon(this, 'You')">🎈</div></div>
+      <div class="balloon-slot"><div class="balloon b-pink" onclick="popBalloon(this, 'are')">🎈</div></div>
+      <div class="balloon-slot"><div class="balloon b-green" onclick="popBalloon(this, 'so')">🎈</div></div>
+      <div class="balloon-slot"><div class="balloon b-purple" onclick="popBalloon(this, 'special')">🎈</div></div>
+    </div>
+    <button id="screen2-next" class="btn" style="display:none;" onclick="goToScreen(3)">Next ➔</button>
+  </div>
+
+  <!-- Screen 3: Candle Blow -->
+  <div id="screen-3" class="screen">
+    <h2 id="candle-title">Blow the candle</h2>
+    <p id="candle-subtitle">Blow into mic or tap the candle</p>
+    <div class="cake-container" onclick="extinguishCandle()">
+      <div id="flame" class="flame"></div>
+      <div class="candle"></div>
+      <div class="cake-base">🎂</div>
+    </div>
+    <button id="screen3-next" class="btn" style="display:none;" onclick="goToScreen(4)">Next ➔</button>
+  </div>
+
+  <!-- Screen 4: Roses -->
+  <div id="screen-4" class="screen">
+    <h2>Your Rose Bouquet 🌹</h2>
+    <div class="bouquet-img">💐</div>
+    <div class="notes-list">
+      <div class="note-bubble">Forever yours 🤍</div>
+      <div class="note-bubble">You make my world beautiful ✨</div>
+      <div class="note-bubble">You are my sunshine ☀️</div>
+      <div class="note-bubble">My favorite person 💕</div>
+    </div>
+    <button class="btn" style="margin-top: 20px;" onclick="goToScreen(5)">Open My Letter 💌</button>
+  </div>
+
+  <!-- Screen 5: Letter -->
+  <div id="screen-5" class="screen">
+    <h2>A Message From My Heart ❤️</h2>
+    <div class="letter-card" id="typewriter"></div>
+    <button id="screen5-next" class="btn" style="margin-top: 20px; display:none;" onclick="goToScreen(6)">One Last Thing ➔</button>
+  </div>
+
+  <!-- Screen 6: Final Gift -->
+  <div id="screen-6" class="screen">
+    <h2 id="gift-heading">Tap the gift!</h2>
+    <p id="gift-sub">Tap 3 times to unwrap</p>
+    <div id="gift-icon" class="gift-box" onclick="tapGift()">🎁</div>
+    
+    <div id="final-card" class="final-card">
+      <!-- Replace with any photo of your choice -->
+      <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400" alt="Memory">
+      <h3 style="color: var(--primary); margin-bottom: 5px;">Lots of love for you ❤️</h3>
+      <p style="font-size: 0.9rem; margin-bottom: 0;">Once again, Happy Birthday!</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function goToScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + num).classList.add('active');
+    
+    if (num === 3) startMicDetection();
+    if (num === 5) typeWriterMessage();
+  }
+
+  // Teasing No button
+  function moveNoBtn() {
+    const btn = document.getElementById('no-btn');
+    btn.style.transform = `translate(${Math.random() * 80 - 40}px, ${Math.random() * 80 - 40}px)`;
+  }
+
+  // Balloon pop logic
+  let popped = 0;
+  function popBalloon(element, word) {
+    element.parentElement.innerHTML = word;
+    popped++;
+    document.getElementById('pop-counter').innerText = `${popped} / 4 POPPED`;
+    confetti({ particleCount: 30, spread: 50 });
+    if (popped === 4) {
+      document.getElementById('screen2-next').style.display = 'block';
+    }
+  }
+
+  // Candle logic (Tap or Mic blow detection)
+  function extinguishCandle() {
+    const flame = document.getElementById('flame');
+    if (!flame.classList.contains('off')) {
+      flame.classList.add('off');
+      document.getElementById('candle-title').innerText = "Close your eyes & make a wish ✨";
+      document.getElementById('candle-subtitle').innerText = "Wish made!";
+      confetti({ particleCount: 120, spread: 70 });
+      document.getElementById('screen3-next').style.display = 'block';
+    }
+  }
+
+  function startMicDetection() {
+    navigator.mediaDevices?.getUserMedia({ audio: true }).then(stream => {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioContext.createAnalyser();
+      const microphone = audioContext.createMediaStreamSource(stream);
+      microphone.connect(analyser);
+      analyser.fftSize = 256;
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+      function detectBlow() {
+        analyser.getByteFrequencyData(dataArray);
+        let sum = dataArray.reduce((a, b) => a + b, 0);
+        let average = sum / dataArray.length;
+        if (average > 45) { // Threshold for blow/loud sound
+          extinguishCandle();
+          stream.getTracks().forEach(track => track.stop());
+          return;
+        }
+        requestAnimationFrame(detectBlow);
+      }
+      detectBlow();
+    }).catch(() => {
+      // Mic not supported/blocked, user can still tap to blow candle
+    });
+  }
+
+  // Typewriter effect
+  const letterText = "Dear Vansh,\n\nHappy Birthday to someone truly special! 🎂\nYou bring so much warmth, laughter, and sweetness into my life. Every moment spent with you is a precious memory.\n\nOn your special day, I wish you all the happiness and joy that you deserve.\n\nWith all my love ❤️";
+  function typeWriterMessage() {
+    let i = 0;
+    const box = document.getElementById('typewriter');
+    box.innerHTML = "";
+    function type() {
+      if (i < letterText.length) {
+        box.innerHTML += letterText.charAt(i) === '\n' ? '<br>' : letterText.charAt(i);
+        i++;
+        setTimeout(type, 35);
+      } else {
+        document.getElementById('screen5-next').style.display = 'block';
+      }
+    }
+    type();
+  }
+
+  // Gift box clicks
+  let giftClicks = 3;
+  function tapGift() {
+    giftClicks--;
+    if (giftClicks > 0) {
+      document.getElementById('gift-sub').innerText = `${giftClicks} taps left!`;
+    } else {
+      document.getElementById('gift-icon').style.display = 'none';
+      document.getElementById('gift-heading').style.display = 'none';
+      document.getElementById('gift-sub').style.display = 'none';
+      document.getElementById('final-card').style.display = 'flex';
+      confetti({ particleCount: 200, spread: 90 });
+    }
+  }
+</script>
+</body>
+</html>
