@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>A Special Surprise For You ❤️</title>
+  <title>Happy Birthday, My Special One ❤️</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
@@ -51,7 +51,6 @@
     h2 { color: var(--deep-accent); font-size: 1.65rem; margin-bottom: 12px; }
     p { color: var(--text); font-size: 1rem; line-height: 1.5; margin-bottom: 20px; }
 
-    /* Buttons */
     .btn {
       background: linear-gradient(135deg, var(--accent), var(--deep-accent));
       color: white;
@@ -72,7 +71,6 @@
       box-shadow: none;
     }
 
-    /* Progress bar */
     .progress-track {
       width: 100%;
       height: 14px;
@@ -89,12 +87,9 @@
       transition: width 0.3s ease;
     }
     .status-text { font-size: 0.88rem; color: var(--deep-accent); font-weight: 600; min-height: 24px; }
-
-    /* Interactive apology buttons */
     .btn-wrap { display: flex; gap: 14px; margin-top: 15px; position: relative; width: 100%; justify-content: center; }
     #mad-btn { position: relative; transition: all 0.2s ease; }
 
-    /* Letter Box */
     .paper {
       background: #ffffff;
       border: 1px solid #ffd0d9;
@@ -109,7 +104,6 @@
       margin-bottom: 20px;
     }
 
-    /* Virtual hug pulse */
     .hug-emoji {
       font-size: 5rem;
       cursor: pointer;
@@ -125,14 +119,14 @@
 
   <!-- Screen 1: Loading Screen -->
   <div id="step-1" class="step active">
-    <div style="font-size: 3.5rem; margin-bottom: 12px;">⏳💌</div>
-    <h2>Preparing Something Special...</h2>
-    <p style="font-size: 0.9rem; margin-bottom: 10px;">Counting down to September 27 ✨</p>
+    <div style="font-size: 3.5rem; margin-bottom: 12px;">⏳🎂</div>
+    <h2>Preparing Your Birthday Surprise...</h2>
+    <p style="font-size: 0.9rem; margin-bottom: 10px;">Today is all about you ✨</p>
     
     <div class="progress-track">
       <div id="progress-bar" class="progress-fill"></div>
     </div>
-    <div id="status-desc" class="status-text">Loading love...</div>
+    <div id="status-desc" class="status-text">Loading birthday love...</div>
     
     <button id="open-btn" class="btn" style="display:none; margin-top: 25px;" onclick="goToStep(2)">Tap to Unlock 🎁</button>
   </div>
@@ -141,7 +135,7 @@
   <div id="step-2" class="step">
     <div style="font-size: 3.5rem; margin-bottom: 12px;">🥺👉👈</div>
     <h2>Are you still upset with me?</h2>
-    <p>I am genuinely so sorry for making you upset. Before your birthday month gets here, can we make peace?</p>
+    <p>I am genuinely so sorry for making you upset. Today is your birthday and you deserve only smiles.</p>
     <div class="btn-wrap">
       <button class="btn" onclick="goToStep(3)">I Forgive You ❤️</button>
       <button class="btn btn-secondary" id="mad-btn" onmouseover="dodge()" onclick="dodge()">Still Mad 😠</button>
@@ -150,28 +144,27 @@
 
   <!-- Screen 3: Heartfelt Letter -->
   <div id="step-3" class="step">
-    <div style="font-size: 2.8rem; margin-bottom: 8px;">🌹</div>
-    <h2>For My Favorite Person</h2>
+    <div style="font-size: 2.8rem; margin-bottom: 8px;">🌹🎂</div>
+    <h2>Happy Birthday To You!</h2>
     <div class="paper">
-      I know I haven't been perfect and upset you, but you mean the world to me.<br><br>
-      September 27 is your special day, and my only wish is to see you smile, feel cherished, and know how much you are loved.<br><br>
-      Thank you for being in my life. Happy early Birthday! 💕
+      I know I made mistakes and upset you, but you truly mean the absolute world to me.<br><br>
+      Today is your special day, and my biggest wish is to see you smile, feel special, and know how much you are loved.<br><br>
+      May your year ahead be full of peace, joy, and laughter. Happy Birthday! 💕
     </div>
-    <button class="btn" onclick="goToStep(4)">Send a Virtual Hug 🤗</button>
+    <button class="btn" onclick="goToStep(4)">Claim Your Birthday Hug 🤗</button>
   </div>
 
   <!-- Screen 4: Virtual Hug & Celebration -->
   <div id="step-4" class="step">
-    <h2>Sending You A Big Hug!</h2>
-    <p>Tap the hug whenever you need a reminder that I care about you:</p>
+    <h2>A Huge Birthday Hug!</h2>
+    <p>Tap whenever you need a reminder that you are loved:</p>
     <div class="hug-emoji" onclick="sendHug()">🫂❤️</div>
-    <h3 id="hug-count" style="color: var(--deep-accent); font-size: 1.1rem; margin-top: 10px;">Hugs sent: 1</h3>
+    <h3 id="hug-count" style="color: var(--deep-accent); font-size: 1.1rem; margin-top: 10px;">Birthday Hugs Sent: 1</h3>
   </div>
 
 </div>
 
 <script>
-  // Simulated Loading Sequence
   let progress = 0;
   const bar = document.getElementById('progress-bar');
   const statusDesc = document.getElementById('status-desc');
@@ -179,9 +172,9 @@
 
   const phrases = [
     { at: 20, text: "Gathering sweet memories... 💭" },
-    { at: 45, text: "Baking birthday surprises for Sept 27... 🎂" },
-    { at: 75, text: "Packing 1,000 apologies & hugs... 🧸" },
-    { at: 95, text: "Ready to make you smile... ✨" }
+    { at: 45, text: "Lighting birthday candles... 🎂" },
+    { at: 75, text: "Packing 1,000 apologies & love... 🧸" },
+    { at: 95, text: "Ready to celebrate you... ✨" }
   ];
 
   const interval = setInterval(() => {
@@ -196,17 +189,16 @@
       clearInterval(interval);
       statusDesc.innerText = "All ready for you! ❤️";
       openBtn.style.display = "inline-block";
-      confetti({ particleCount: 50, spread: 60 });
+      confetti({ particleCount: 60, spread: 70 });
     }
-  }, 50);
+  }, 40);
 
   function goToStep(num) {
     document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     document.getElementById('step-' + num).classList.add('active');
-    if (num === 3) confetti({ particleCount: 100, spread: 80 });
+    if (num === 3) confetti({ particleCount: 120, spread: 80 });
   }
 
-  // Teasing "Still Mad" button dodges clicks
   function dodge() {
     const btn = document.getElementById('mad-btn');
     const x = Math.random() * 120 - 60;
@@ -214,16 +206,11 @@
     btn.style.transform = `translate(${x}px, ${y}px)`;
   }
 
-  // Virtual hug counter with confetti bursts
   let hugs = 1;
   function sendHug() {
     hugs++;
-    document.getElementById('hug-count').innerText = `Hugs sent: ${hugs}`;
-    confetti({
-      particleCount: 40,
-      spread: 60,
-      origin: { y: 0.6 }
-    });
+    document.getElementById('hug-count').innerText = `Birthday Hugs Sent: ${hugs}`;
+    confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
   }
 </script>
 </body>
