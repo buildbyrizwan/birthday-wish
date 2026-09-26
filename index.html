@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday Vaishnavi! 💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg: #fff0f5;
+      --primary: #ff4d6d;
+      --deep-pink: #c9184a;
+      --card-bg: #ffffff;
+      --text: #590d22;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: radial-gradient(circle at top, #ffccd5 0%, #ffb3c1 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 14px;
+    }
+    .phone-container {
+      width: 100%;
+      max-width: 400px;
+      min-height: 620px;
+      background: var(--bg);
+      border-radius: 30px;
+      box-shadow: 0 15px 40px rgba(201, 24, 74, 0.25);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .screen {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    .screen.active { display: flex; }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.92) translateY(15px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    h2 { color: var(--deep-pink); font-size: 1.7rem; margin-bottom: 8px; font-weight: 700; }
+    p { color: var(--text); font-size: 0.98rem; line-height: 1.5; margin-bottom: 20px; }
+
+    /* Buttons */
+    .btn {
+      background: linear-gradient(135deg, var(--primary), var(--deep-pink));
+      color: white;
+      border: none;
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 5px 18px rgba(255, 77, 109, 0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:active { transform: scale(0.95); }
+
+    /* Screen 1: Loading */
+    .progress-track {
+      width: 100%;
+      height: 14px;
+      background: #ffccd5;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 20px 0 12px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff758f, var(--deep-pink));
+      border-radius: 12px;
+      transition: width 0.3s ease;
+    }
+    .status-text { font-size: 0.9rem; color: var(--deep-pink); font-weight: 600; min-height: 24px; }
+
+    /* Screen 2: Balloons */
+    .balloons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 25px 0; }
+    .balloon-slot {
+      width: 110px;
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--deep-pink);
+    }
+    .balloon {
+      width: 85px;
+      height: 105px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      box-shadow: inset -6px -6px 12px rgba(0,0,0,0.1), 0 8px 18px rgba(0,0,0,0.1);
+      transition: transform 0.15s;
+      animation: float 2.5s infinite alternate ease-in-out;
+    }
+    .balloon:active { transform: scale(0.85); }
+    .b-blue { background: radial-gradient(circle at 30% 30%, #cbebff, #62b6ff); animation-delay: 0s; }
+    .b-pink { background: radial-gradient(circle at 30% 30%, #ffd1dc, #ff6584); animation-delay: 0.3s; }
+    .b-purple { background: radial-gradient(circle at 30% 30%, #ecd4ff, #a66cff); animation-delay: 0.6s; }
+    .b-gold { background: radial-gradient(circle at 30% 30%, #ffeaa7, #fdcb6e); animation-delay: 0.9s; }
+
+    @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+
+    /* Screen 3: Candle */
+    .cake-container { position: relative; margin: 30px 0; cursor: pointer; }
+    .flame {
+      width: 18px;
+      height: 30px;
+      background: #ffb703;
+      border-radius: 50% 50% 20% 20%;
+      margin: 0 auto 6px;
+      box-shadow: 0 0 25px #fb8500, 0 0 45px #ffb703;
+      animation: flicker 0.35s infinite alternate;
+    }
+    .flame.off { display: none; }
+    @keyframes flicker { 0% { transform: scale(1); } 100% { transform: scale(1.15) rotate(3deg); } }
+    .candle { width: 14px; height: 50px; background: repeating-linear-gradient(45deg, #fff, #fff 6px, #ff4d6d 6px, #ff4d6d 12px); margin: 0 auto; border-radius: 4px; }
+    .cake-base { font-size: 5rem; line-height: 1; }
+
+    /* Screen 4: Bouquet */
+    .bouquet-img { font-size: 5.5rem; margin: 15px 0; animation: float 3s ease-in-out infinite alternate; }
+    .notes-list { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 300px; margin-bottom: 20px; }
+    .note-bubble {
+      background: white;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--deep-pink);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border: 1px solid #ffd0d9;
+    }
+
+    /* Screen 5: Letter */
+    .letter-card {
+      background: #fffdf9;
+      border: 1px solid #f6cfd7;
+      border-radius: 18px;
+      padding: 22px;
+      text-align: left;
+      min-height: 250px;
+      max-height: 340px;
+      overflow-y: auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+      line-height: 1.6;
+      color: #3b101c;
+      font-size: 1rem;
+      font-family: 'Georgia', serif;
+    }
+
+    /* Screen 6: Final Gift */
+    .gift-box { font-size: 5.5rem; cursor: pointer; transition: transform 0.2s; margin: 25px 0; }
+    .gift-box:active { transform: scale(1.2) rotate(8deg); }
+    .final-card {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      background: white;
+      padding: 22px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border: 1px solid #ffccd5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone-container">
+
+  <!-- Screen 1: Loading Progress -->
+  <div id="screen-1" class="screen active">
+    <div style="font-size: 3.8rem; margin-bottom: 10px;">⏳✨</div>
+    <h2>Unlocking Birthday Magic...</h2>
+    <p>Preparing something crazy for Vaishnavi 💖</p>
+    
+    <div class="progress-track">
+      <div id="progress-bar" class="progress-fill"></div>
+    </div>
+    <div id="status-desc" class="status-text">Gathering sparkles... ✨</div>
+    
+    <button id="open-btn" class="btn" style="display:none; margin-top: 25px;" onclick="goToScreen(2)">Start The Fun! 🎉</button>
+  </div>
+
+  <!-- Screen 2: Balloons Bursting -->
+  <div id="screen-2" class="screen">
+    <h2>Pop All 4 Balloons! 🎈</h2>
+    <p id="pop-counter">Tap to pop (0 / 4)</p>
+    <div class="balloons-grid">
+      <div class="balloon-slot"><div class="balloon b-blue" onclick="popBalloon(this, 'Vaishnavi')">🎈</div></div>
+      <div class="balloon-slot"><div class="balloon b-pink" onclick="popBalloon(this, 'is')">🎈</div></div>
+      <div class="balloon-slot"><div class="balloon b-purple" onclick="popBalloon(this, 'so')">🎈</div></div>
+      <div class="balloon-slot"><div class="balloon b-gold" onclick="popBalloon(this, 'Special! ✨')">🎈</div></div>
+    </div>
+    <button id="screen2-next" class="btn" style="display:none;" onclick="goToScreen(3)">Blow The Cake ➔</button>
+  </div>
+
+  <!-- Screen 3: Candle Blow -->
+  <div id="screen-3" class="screen">
+    <h2 id="candle-title">Make A Wish, Vaishnavi! 🎂</h2>
+    <p id="candle-subtitle">Tap the candle to blow it out!</p>
+    <div class="cake-container" onclick="extinguishCandle()">
+      <div id="flame" class="flame"></div>
+      <div class="candle"></div>
+      <div class="cake-base">🎂</div>
+    </div>
+    <button id="screen3-next" class="btn" style="display:none;" onclick="goToScreen(4)">Special Flowers For You 💐</button>
+  </div>
+
+  <!-- Screen 4: Roses & Compliments -->
+  <div id="screen-4" class="screen">
+    <h2>Your Rose Bouquet 🌹</h2>
+    <div class="bouquet-img">💐</div>
+    <div class="notes-list">
+      <div class="note-bubble">✨ You make everything around you brighter</div>
+      <div class="note-bubble">💖 One of a kind personality</div>
+      <div class="note-bubble">🌟 May all your wishes come true</div>
+      <div class="note-bubble">🎉 Happy Birthday Vaishnavi!</div>
+    </div>
+    <button class="btn" onclick="goToScreen(5)">Read Your Message 💌</button>
+  </div>
+
+  <!-- Screen 5: Letter with Typewriter -->
+  <div id="screen-5" class="screen">
+    <h2>From The Heart ❤️</h2>
+    <div class="letter-card" id="typewriter"></div>
+    <button id="screen5-next" class="btn" style="margin-top: 20px; display:none;" onclick="goToScreen(6)">One Last Thing 🎁</button>
+  </div>
+
+  <!-- Screen 6: Final Gift Tap -->
+  <div id="screen-6" class="screen">
+    <h2 id="gift-heading">Unwrap Your Gift! 🎁</h2>
+    <p id="gift-sub">Tap 3 times to open</p>
+    <div id="gift-icon" class="gift-box" onclick="tapGift()">🎁</div>
+    
+    <div id="final-card" class="final-card">
+      <div style="font-size: 4rem; margin-bottom: 10px;">👑🎂✨</div>
+      <h2 style="color: var(--deep-pink); margin-bottom: 6px;">Happy Birthday, Vaishnavi!</h2>
+      <p style="margin-bottom: 12px;">May this year bring you endless happiness, adventure, laughter, and success!</p>
+      <button class="btn" onclick="celebrateAgain()">Blast Confetti 🎊</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Loading Bar
+  let progress = 0;
+  const bar = document.getElementById('progress-bar');
+  const statusDesc = document.getElementById('status-desc');
+  const openBtn = document.getElementById('open-btn');
+
+  const steps = [
+    { at: 20, text: "Inflating colorful balloons... 🎈" },
+    { at: 45, text: "Baking a delicious chocolate cake... 🎂" },
+    { at: 75, text: "Gathering bouquets & wishes... 💐" },
+    { at: 95, text: "Surprise ready for Vaishnavi! ✨" }
+  ];
+
+  const timer = setInterval(() => {
+    progress += 2;
+    bar.style.width = progress + '%';
+    steps.forEach(s => {
+      if (progress >= s.at) statusDesc.innerText = s.text;
+    });
+
+    if (progress >= 100) {
+      clearInterval(timer);
+      statusDesc.innerText = "Ready to celebrate! 💖";
+      openBtn.style.display = "inline-block";
+      confetti({ particleCount: 60, spread: 70 });
+    }
+  }, 35);
+
+  function goToScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + num).classList.add('active');
+    if (num === 5) startTypewriter();
+  }
+
+  // Balloon Popping
+  let popped = 0;
+  function popBalloon(el, word) {
+    el.parentElement.innerHTML = word;
+    popped++;
+    document.getElementById('pop-counter').innerText = `Popped (${popped} / 4)`;
+    confetti({ particleCount: 35, spread: 55, origin: { y: 0.6 } });
+    if (popped === 4) {
+      document.getElementById('screen2-next').style.display = 'inline-block';
+    }
+  }
+
+  // Candle Extinguish
+  function extinguishCandle() {
+    const flame = document.getElementById('flame');
+    if (!flame.classList.contains('off')) {
+      flame.classList.add('off');
+      document.getElementById('candle-title').innerText = "Wish Sent To The Stars! ✨";
+      document.getElementById('candle-subtitle').innerText = "May every dream of yours turn into reality 🎂";
+      confetti({ particleCount: 120, spread: 80 });
+      document.getElementById('screen3-next').style.display = 'inline-block';
+    }
+  }
+
+  // Typewriter
+  const letter = "Dearest Vaishnavi,\n\nHappy Birthday! 🎉\n\nToday is dedicated to celebrating the amazing, wonderful person you are. May your smile never fade and may your upcoming year be packed with incredible achievements, warm memories, and pure joy.\n\nKeep shining bright always! 💖";
+  let letterIndex = 0;
+  function startTypewriter() {
+    const box = document.getElementById('typewriter');
+    box.innerHTML = "";
+    function type() {
+      if (letterIndex < letter.length) {
+        box.innerHTML += letter.charAt(letterIndex) === '\n' ? '<br>' : letter.charAt(letterIndex);
+        letterIndex++;
+        setTimeout(type, 30);
+      } else {
+        document.getElementById('screen5-next').style.display = 'inline-block';
+      }
+    }
+    type();
+  }
+
+  // Gift Unboxing
+  let taps = 3;
+  function tapGift() {
+    taps--;
+    if (taps > 0) {
+      document.getElementById('gift-sub').innerText = `${taps} tap${taps > 1 ? 's' : ''} left!`;
+    } else {
+      document.getElementById('gift-icon').style.display = 'none';
+      document.getElementById('gift-heading').style.display = 'none';
+      document.getElementById('gift-sub').style.display = 'none';
+      document.getElementById('final-card').style.display = 'flex';
+      celebrateAgain();
+    }
+  }
+
+  function celebrateAgain() {
+    confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
+  }
+</script>
+</body>
+</html>
